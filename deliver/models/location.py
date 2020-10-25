@@ -3,22 +3,22 @@
 Hierachy of Classes:
 - Location: Object
   - Coordinate: Object
-  - Address: Object
+  - Address: str
 """
 
-from pydantic import BaseModel
+from pydantic import BaseModel, confloat
 
-# TODO: Create Coordinate model
+
 class Coordinate(BaseModel):
-    """TODO: Add Docstring
-    """
-    pass
+    """Class for coordinates on earth
 
-# TODO: Create Address model
-class Address(BaseModel):
-    """TODO: Add Docstring
+    Attributes:
+        latitude (float): The latitude of the coordinate
+        longitude (float): The longitude of the coordinate
     """
-    pass
+    latitude:  confloat(ge=- 90, le= 90)
+    longitude: confloat(ge=-180, le=180)
+
 
 # TODO: Create Location model
 class Location(BaseModel):

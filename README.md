@@ -114,6 +114,7 @@ Aloing with that, I use a plugin called [`pyenv-virtualenv`](https://github.com/
 │   └── __init__.py
 ├── tests
 │   ├── models
+│   │   ├── test_location.py
 │   │   ├── test_restaurant.py
 │   │   └── test_utils.py
 │   └── test_main.py
