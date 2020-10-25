@@ -5,26 +5,37 @@ Hierachy of Classes:
   - Interval: Object
   - Weekday: IntEnum
 """
-
-from enum import IntEnum
+from typing import Optional
+from datetime import time as Time
 
 from pydantic import BaseModel
 
 
-# TODO: Create Interval model
 class Interval(BaseModel):
-    """TODO: Add Docstring
-    """
-    pass
+    """Class for defining a start to end hours
 
-# TODO: Create Weekday IntEnum
-class Weekday(IntEnum):
-    """TODO: Add Docstring
+    Attributes:
+        start (Time): The starting time of the day, default 9 AM
+        end (Time): The end time of the day, default 5 PM (17:00)
     """
-    pass
+    start: Time = Time(9)
+    end: Time = Time(17)
 
-# TODO: Create OpeningHours model
+
 class OpeningHours(BaseModel):
-    """TODO: Add Docstring
+    """Class for defining a start to end hours for the week
+
+    Attributes:
+        [Monday, ..., Sunday]: Intervals for each day of the week
     """
-    pass
+    Monday:    Optional[Interval]
+    Tuesday:   Optional[Interval]
+    Wednesday: Optional[Interval]
+    Thursday:  Optional[Interval]
+    Friday:    Optional[Interval]
+    Saturday:  Optional[Interval]
+    Sunday:    Optional[Interval]
+
+    # TODO: Test no-intersection validation
+
+    # TODO: Test current opening w/ timezone difference
