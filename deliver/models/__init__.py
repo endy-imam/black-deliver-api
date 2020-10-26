@@ -21,15 +21,24 @@ Hierachy of Classes:
 from typing import Optional, Set, Dict
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field, HttpUrl, conset
+from pydantic import BaseModel, Field, HttpUrl, conset, validator
 
 from deliver.models.utils    import to_lower_camel
 from deliver.models.location import Location
 from deliver.models.hours    import OpeningHours
 from deliver.models.services import Services
+from deliver.models.enums    import (
+    FoodCategory,
+    DiningAmenety,
+    SafetyMeasure,
+    Inclusivity,
+    WheelchairAccessibity
+)
 
+AMENETY_MESSAGE = 'Ameneties only allowed when dining is available'
+COVID_MESSAGE = ('Under COVID-19, safety measures are required '
+                 'for dining or pickup')
 
-# TODO: Create Restaurant model
 class Restaurant(BaseModel):
     """Class for full restaurant info with validation
 
@@ -55,19 +64,19 @@ class Restaurant(BaseModel):
         wheelchair_accessibilities (Set[WheelchairAccessibity]):
             A set of wheelchair accessibilities
     """
-    # TODO: Integrate all fields below
     id: UUID = Field(default_factory=uuid4)
     name: str
     location: Location
     opening_hours: OpeningHours = OpeningHours()
-    # food_categories: Set[FoodCategory]
+    food_categories: Set[FoodCategory] = set()
     menu_url: Optional[HttpUrl]
     dining_available: bool = False
-    # dining_ameneties: Set[DiningAmenety]
-    # safety_measures: Set[SafetyMeasure]
+    dining_ameneties: Optional[Set[DiningAmenety]]
+    safety_measures: Optional[Set[SafetyMeasure]]
     services: Services = Services()
-    # inclusivities: Set[Inclusivity]
-    # wheelchair_accessibities: Set[WheelchairAccessibity]
+    inclusivities: Set[Inclusivity] = set()
+    wheelchair_accessibities: Set[WheelchairAccessibity] = set()
+
 
     class Config:
         """Config for Restaurant Model
@@ -75,3 +84,47 @@ class Restaurant(BaseModel):
         - Must comply as typical JS/JSON variable name
         """
         alias_generator = to_lower_camel
+
+
+    @validator('dining_ameneties')
+    def ameneties_needs_dining(cls, val, values):
+        available = values.get('dining_available', False)
+        if not available and val is not None:
+            raise ValueError(AMENETY_MESSAGE)
+        return val
+
+    @validator('safety_measures')
+    def inddor_safety(cls, val, values):
+        """Ensure if safety measures are enforced when dining or pickup
+        """
+        dining = values.get('dining_available', False)
+        pickup = (
+            values['services'].has_pickup() if 'services' in values else False)
+        indoors = dining or pickup
+        if indoors and not bool(val):
+            raise ValueError(COVID_MESSAGE)
+        return val
+
+
+    def has_pickup(self) -> bool:
+        """Check if the restaurant has pickup
+        """
+        return self.services.has_pickup()
+
+    def has_curbside(self) -> bool:
+        """Check if the restaurant has curbside pickup
+        """
+        return self.services.has_curbside()
+
+    def has_delivery(self) -> bool:
+        """Check if the restaurant has delivery
+        """
+        return self.services.has_delivery()
+
+    def is_wheelchair_friendly(self) -> bool:
+        """Return if wheelchair friendly
+        """
+        return bool(self.wheelchair_accessibities)
+
+
+    # TODO: Test current opening w/ timezone difference

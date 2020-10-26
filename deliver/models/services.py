@@ -11,6 +11,17 @@ from typing import Dict, Optional, Iterator
 from pydantic import BaseModel, root_validator, constr, HttpUrl
 
 from deliver.models.utils import to_lower_camel
+from deliver.models.enums import DeliveryApp
+
+
+SERVICES_BASE_URL = {
+    DeliveryApp.UBER_EATS: 'https://www.ubereats.com/',
+    DeliveryApp.GRUBHUB  : 'https://www.grubhub.com/',
+    DeliveryApp.DOORDASH : 'https://www.doordash.com/stores/',
+    DeliveryApp.TOAST    : 'https://www.toasttab.com/',
+    DeliveryApp.YELP     : 'https://yelp.to',
+    DeliveryApp.POSTMATES: 'https://postmates.com/merchant/'
+}
 
 
 class BaseService(BaseModel):
@@ -105,7 +116,7 @@ class Services(BaseModel):
             for service in self._iter_service()
         )
 
-    def has_curbside(self):
+    def has_curbside(self) -> bool:
         """Check if the restaurant has curbside pickup
         """
         return any(
@@ -113,7 +124,7 @@ class Services(BaseModel):
             for service in self._iter_service()
         )
 
-    def has_delivery(self):
+    def has_delivery(self) -> bool:
         """Check if the restaurant has delivery
         """
         return len(self.delivery_apps) > 0 or any(
