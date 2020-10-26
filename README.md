@@ -108,14 +108,17 @@ Aloing with that, I use a plugin called [`pyenv-virtualenv`](https://github.com/
 ├── deliver
 │   ├── models
 │   │   ├── __init__.py
+│   │   ├── enums.py
 │   │   ├── hours.py
 │   │   ├── location.py
+│   │   ├── services.py
 │   │   └── utils.py
 │   └── __init__.py
 ├── tests
 │   ├── models
 │   │   ├── test_location.py
 │   │   ├── test_restaurant.py
+│   │   ├── test_services.py
 │   │   └── test_utils.py
 │   └── test_main.py
 ├── .gitignore

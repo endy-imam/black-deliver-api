@@ -23,9 +23,10 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, HttpUrl, conset
 
-from deliver.models.utils import to_lower_camel
+from deliver.models.utils    import to_lower_camel
 from deliver.models.location import Location
-from deliver.models.hours import OpeningHours
+from deliver.models.hours    import OpeningHours
+from deliver.models.services import Services
 
 
 # TODO: Create Restaurant model
@@ -64,7 +65,7 @@ class Restaurant(BaseModel):
     dining_available: bool = False
     # dining_ameneties: Set[DiningAmenety]
     # safety_measures: Set[SafetyMeasure]
-    # services: Services
+    services: Services = Services()
     # inclusivities: Set[Inclusivity]
     # wheelchair_accessibities: Set[WheelchairAccessibity]
 
