@@ -116,10 +116,12 @@ Aloing with that, I use a plugin called [`pyenv-virtualenv`](https://github.com/
 │   └── __init__.py
 ├── tests
 │   ├── models
+│   │   ├── __init__.py
 │   │   ├── test_location.py
 │   │   ├── test_restaurant.py
 │   │   ├── test_services.py
 │   │   └── test_utils.py
+│   ├── __init__.py
 │   └── test_main.py
 ├── .gitignore
 ├── .pylintrc
