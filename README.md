@@ -12,7 +12,8 @@ The Backend API portion of the Project Delivery App for [Out In Tech U Mentorshi
 [![Stargazers][stars-shield]][stars-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
+[![Build Status][travisci-shield]][travisci-url]
+[![codecov][codecov-shield]][codecov-url]
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
@@ -45,11 +46,11 @@ This is the backend portion of the app that integrate betweens the [frontend app
 
 ### Built With
 
-* **Runtime + Language:** [Python](https://www.python.org/) (Working with 3.8)
+* **Runtime + Language:** [Python](https://www.python.org/) (Working with 3.8 but can work with 3.6+)
 * **Framework:** [FastAPI](https://fastapi.tiangolo.com/)
 * **Testing:** [pytest](https://docs.pytest.org/en/stable/)
 * **Coverage:** [Coverage.py](https://coverage.readthedocs.io/)
-* **CD/CI:** [TBD]
+* **CD/CI:** [Travis CI](https://travis-ci.com/github/EndyPremier/project-deliver-api/)
 * **Hosting:** [TBD]
 
 
@@ -61,7 +62,7 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-Have a valid Python version that can work. This project is being working with version 3.8.6. You can either install the [latest version](https://www.python.org/downloads/) or [this specific version](https://www.python.org/downloads/release/python-386/) at Python's official download page.
+Have a valid Python version that can work. This project is being working with version 3.8.6 but CI testing verifys that it works from 3.6+ onward. You can either install the [latest version](https://www.python.org/downloads/) or [this specific version](https://www.python.org/downloads/release/python-386/) at Python's official download page.
 
 However, I recommend using [`pyenv`](https://github.com/pyenv/pyenv) to install your desired version from there.
 ```sh
@@ -125,6 +126,7 @@ Aloing with that, I use a plugin called [`pyenv-virtualenv`](https://github.com/
 │   └── test_main.py
 ├── .gitignore
 ├── .pylintrc
+├── .travis.yml
 ├── LICENSE
 ├── README.md
 └── requirements.txt
@@ -186,3 +188,7 @@ Distributed under the GNU GPL v3 License. See `LICENSE` for more information.
 [license-url]: https://github.com/EndyPremier/project-deliver-api/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/endy-imam
+[travisci-shield]: https://travis-ci.com/EndyPremier/project-deliver-api.svg
+[travisci-url]: https://travis-ci.com/EndyPremier/project-deliver-api
+[codecov-shield]: https://codecov.io/gh/EndyPremier/project-deliver-api/branch/main/graph/badge.svg?token=GUKQH21BIS
+[codecov-url]: https://codecov.io/gh/EndyPremier/project-deliver-api
