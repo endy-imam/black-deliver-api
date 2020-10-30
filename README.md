@@ -23,6 +23,7 @@ The Backend API portion of the Project Delivery App for [Out In Tech U Mentorshi
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
+  * [Run the App!](#run-the-app!)
   * [Directory Tree](#directory-tree)
   * [Testing](#testing)
     * [Using just `pytest`](#using-just-pytest)
@@ -103,6 +104,14 @@ Aloing with that, I use a plugin called [`pyenv-virtualenv`](https://github.com/
    ```
 
 
+### Run the App!
+
+Just type this command and it will be run on `http://127.0.0.1:8000` to be able to fiddle around.
+```sh
+# at project root
+$ uvicorn deliver.main:app --reload
+```
+
 ### Directory Tree
 ```
 .
@@ -114,7 +123,8 @@ Aloing with that, I use a plugin called [`pyenv-virtualenv`](https://github.com/
 │   │   ├── location.py
 │   │   ├── services.py
 │   │   └── utils.py
-│   └── __init__.py
+│   ├── __init__.py
+│   └── main.py
 ├── tests
 │   ├── models
 │   │   ├── __init__.py
