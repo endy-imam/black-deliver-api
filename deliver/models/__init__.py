@@ -18,10 +18,10 @@ Hierachy of Classes:
     - Wheelchair Accessibity: List[str]
 """
 
-from typing import Optional, Set, Dict
+from typing import Optional, Set, Dict, Union, Any, Type
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field, HttpUrl, conset, validator
+from pydantic import BaseModel, Field, HttpUrl, conset, root_validator
 
 from deliver.models.utils    import to_lower_camel
 from deliver.models.location import Location
@@ -35,9 +35,6 @@ from deliver.models.enums    import (
     WheelchairAccessibity
 )
 
-AMENETY_MESSAGE = 'Ameneties only allowed when dining is available'
-COVID_MESSAGE = ('Under COVID-19, safety measures are required '
-                 'for dining or pickup')
 
 class Restaurant(BaseModel):
     """Class for full restaurant info with validation
@@ -53,10 +50,10 @@ class Restaurant(BaseModel):
             A set of type of food, should be non-empty
         dining_available (bool):
             If the restaurant is available for dining
-        safety_measures (Optional[Set[SafetyMeasure]]):
-            A set of safety measures, required if dining available right now
         dining_ameneties (Optional[Set[DiningAmenety]]):
             A set of ameneties, optional but only if dining
+        safety_measures (Optional[Set[SafetyMeasure]]):
+            A set of safety measures, required if dining available right now
         services (Services):
             A list of pickup and deliver services available
         inclusivities (Set[Inclusivity]):
@@ -68,9 +65,12 @@ class Restaurant(BaseModel):
     name: str
     location: Location
     opening_hours: OpeningHours = OpeningHours()
-    food_categories: Set[FoodCategory] = set()
+    food_categories: Set[Union[FoodCategory, str]] = set()
     menu_url: Optional[HttpUrl]
     dining_available: bool = False
+    pickup_available: bool = False
+    curbside_available: bool = False
+    delivery_available: bool = False
     dining_ameneties: Optional[Set[DiningAmenety]]
     safety_measures: Optional[Set[SafetyMeasure]]
     services: Services = Services()
@@ -85,46 +85,18 @@ class Restaurant(BaseModel):
         """
         alias_generator = to_lower_camel
 
-
-    @validator('dining_ameneties')
-    def ameneties_needs_dining(cls, val, values):
-        available = values.get('dining_available', False)
-        if not available and val is not None:
-            raise ValueError(AMENETY_MESSAGE)
-        return val
-
-    @validator('safety_measures')
-    def indoor_safety(cls, val, values):
-        """Ensure if safety measures are enforced when dining or pickup
-        """
-        dining = values.get('dining_available', False)
-        pickup = (
-            values['services'].has_pickup() if 'services' in values else False)
-        indoors = dining or pickup
-        if indoors and not bool(val):
-            raise ValueError(COVID_MESSAGE)
-        return val
-
-
-    def has_pickup(self) -> bool:
+    @root_validator
+    def has_pickup(cls, values):
         """Check if the restaurant has pickup
         """
-        return self.services.has_pickup()
-
-    def has_curbside(self) -> bool:
-        """Check if the restaurant has curbside pickup
-        """
-        return self.services.has_curbside()
-
-    def has_delivery(self) -> bool:
-        """Check if the restaurant has delivery
-        """
-        return self.services.has_delivery()
-
-    def is_wheelchair_friendly(self) -> bool:
-        """Return if wheelchair friendly
-        """
-        return bool(self.wheelchair_accessibities)
-
-
-    # TODO: Test current opening w/ timezone difference
+        services = values['services']
+        values['pickup_available'] = (
+            services.has_pickup() if services else False
+        )
+        values['curbside_available'] = (
+            services.has_curbside() if services else False
+        )
+        values['delivery_available'] = (
+            services.has_delivery() if services else False
+        )
+        return values
