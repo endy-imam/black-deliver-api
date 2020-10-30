@@ -94,7 +94,7 @@ class Restaurant(BaseModel):
         return val
 
     @validator('safety_measures')
-    def inddor_safety(cls, val, values):
+    def indoor_safety(cls, val, values):
         """Ensure if safety measures are enforced when dining or pickup
         """
         dining = values.get('dining_available', False)

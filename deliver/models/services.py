@@ -116,7 +116,10 @@ class Services(BaseModel):
     def _iter_service(self) -> Iterator[BaseService]:
         """An iterator of services outside of delivery_apps
         """
-        return chain((self.website, self.phone), self.extras.values())
+        return filter(
+            lambda service: service is not None,
+            chain((self.website, self.phone), self.extras.values())
+        )
 
     def has_pickup(self) -> bool:
         """Check if the restaurant has pickup

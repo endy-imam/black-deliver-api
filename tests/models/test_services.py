@@ -79,3 +79,26 @@ def test_valid_restaurant_assign(base_services):
     Testing if input arguments assign to restaurant correctly
     """
     Services(**base_services)
+
+def test_services_availability(base_services):
+    """Testing services returns existing service
+
+    Testing if base_service can see if it can do pickup, curbside,
+    and delivery.
+    """
+    services = Services(**base_services)
+    assert services.has_pickup()
+    assert services.has_curbside()
+    assert services.has_delivery()
+
+
+def test_services_no_availability(base_services):
+    """Testing services returns existing service
+
+    Testing if base_service can see if it can do pickup, curbside,
+    and delivery.
+    """
+    services = Services()
+    assert not services.has_pickup()
+    assert not services.has_curbside()
+    assert not services.has_delivery()
