@@ -54,6 +54,15 @@ class BaseService(BaseModel):
             raise ValueError("Curbside only available if pickup is available")
         return values
 
+    @root_validator
+    def has_delivery_output(cls, values):
+        """Validate that it has such service available
+        """
+        fields = ('pickup', 'curbside', 'delivery')
+        if not any(values.get(field, False) for field in fields):
+            raise ValueError("Valid service if it has pickup or delivery")
+        return values
+
 
 PHONE_REGEX = (
     r"^[\+]?(1[-\s\.])?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$"

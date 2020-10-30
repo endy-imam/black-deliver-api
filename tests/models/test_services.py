@@ -2,9 +2,35 @@
 """
 
 import pytest
+from pydantic import ValidationError
 
-from deliver.models.services import Services
+from deliver.models.services import BaseService, Services
 from deliver.models.enums    import DeliveryApp
+
+
+@pytest.mark.parametrize('pickup, curbside, delivery', (
+    (True , False, False),
+    (True , True , False),
+    (False, False, True ),
+    (True , False, True ),
+    (True , True , True ),
+))
+def test_valid_service_assign(pickup, curbside, delivery):
+    """Test that all cases are valid services
+    """
+    BaseService(pickup=pickup, curbside=curbside, delivery=delivery)
+
+def test_invalid_service_no_services():
+    """Test that it returns exception when no service output available
+    """
+    with pytest.raises(ValidationError):
+        BaseService()
+
+def test_invalid_service_curbside_no_pickup():
+    """Test that it returns exception when curbside without pickup
+    """
+    with pytest.raises(ValidationError):
+        BaseService(curbside=True)
 
 
 @pytest.fixture
