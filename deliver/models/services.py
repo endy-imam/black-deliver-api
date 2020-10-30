@@ -20,7 +20,8 @@ SERVICES_BASE_URL = {
     DeliveryApp.DOORDASH : 'https://www.doordash.com/stores/',
     DeliveryApp.TOAST    : 'https://www.toasttab.com/',
     DeliveryApp.YELP     : 'https://yelp.to',
-    DeliveryApp.POSTMATES: 'https://postmates.com/merchant/'
+    DeliveryApp.POSTMATES: 'https://postmates.com/merchant/',
+    DeliveryApp.CAVIAR   : 'https://www.trycaviar.com/'
 }
 
 

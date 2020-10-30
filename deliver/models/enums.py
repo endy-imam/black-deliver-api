@@ -19,6 +19,7 @@ class DeliveryApp(str, Enum):
     POSTMATES = 'Postmates'
     TOAST     = 'Toast'
     YELP      = 'Yelp'
+    CAVIAR    = 'Caviar'
 
 
 class DiningAmenety(str, Enum):

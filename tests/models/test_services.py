@@ -38,6 +38,11 @@ def base_services():
                 'pickup': True,
                 'delivery': True
             },
+            DeliveryApp.CAVIAR: {
+                'url': 'https://www.trycaviar.com/store/dig-boston-915050/en-US',
+                'pickup': True,
+                'delivery': True
+            },
         },
     }
 
