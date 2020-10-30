@@ -1,0 +1,21 @@
+language: python
+
+# Testing Python from 3.6 and above
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "3.9"
+
+# install requirements
+install:
+  - pip install -r requirements.txt
+
+# Test with codecoverage to cov.xml
+script:
+  - python -m pytest --cov-report=xml:cov.xml --cov=deliver tests
+
+# push the cov.xml to codecov
+# see result at https://codecov.io/gh/EndyPremier/project-deliver-api
+after_success:
+  - codecov
