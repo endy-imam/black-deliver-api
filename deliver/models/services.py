@@ -10,8 +10,8 @@ from itertools import chain
 from typing import Dict, Optional, Iterator
 from pydantic import BaseModel, root_validator, constr, HttpUrl
 
-from deliver.models.utils import to_lower_camel
-from deliver.models.enums import DeliveryApp
+from .utils import to_lower_camel
+from .enums import DeliveryApp
 
 
 SERVICES_BASE_URL = {

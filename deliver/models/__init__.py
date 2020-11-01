@@ -23,11 +23,11 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, HttpUrl, conset, root_validator
 
-from deliver.models.utils    import to_lower_camel
-from deliver.models.location import Location
-from deliver.models.hours    import OpeningHours
-from deliver.models.services import Services
-from deliver.models.enums    import (
+from .utils    import to_lower_camel
+from .location import Location
+from .hours    import OpeningHours
+from .services import Services
+from .enums    import (
     FoodCategory,
     DiningAmenety,
     SafetyMeasure,
