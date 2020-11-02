@@ -1,5 +1,7 @@
-pydantic==1.6.1
-pylint==2.6.0
-pytest==6.1.2
-coverage==5.3
-pytest-cov==2.10.1
+# Production
+fastapi>=0.61.1  # Async Web Framework w/ Pydantic models
+mangum>=0.10.0   # ASGI adapter to wrap FastAPI for AWS Lambda
+
+# Developer Oriented
+pylint      # linting for Python
+pytest-cov  # includes pytest + coverage
