@@ -97,10 +97,11 @@ Aloing with that, I use a plugin called [`pyenv-virtualenv`](https://github.com/
    $ echo 3.8.6/env/deliver-api > '.python-version'
    ```
 
-3. Install pip packages
+3. Install pip packages and dev packages
    ```sh
    # at project root
    $ pip install -r requirements.txt
+   $ pip install -r requirements_dev.txt
    ```
 
 
@@ -139,7 +140,8 @@ $ uvicorn deliver.main:app --reload
 ├── .travis.yml
 ├── LICENSE
 ├── README.md
-└── requirements.txt
+├── requirements.txt
+└── requirements_dev.txt
 ```
 
 

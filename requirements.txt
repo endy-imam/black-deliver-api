@@ -1,7 +1,3 @@
 # Production
 fastapi>=0.61.1  # Async Web Framework w/ Pydantic models
 mangum>=0.10.0   # ASGI adapter to wrap FastAPI for AWS Lambda
-
-# Developer Oriented
-pylint      # linting for Python
-pytest-cov  # includes pytest + coverage

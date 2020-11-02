@@ -10,6 +10,7 @@ python:
 # install requirements
 install:
   - pip install -r requirements.txt
+  - pip install -r requirements_dev.txt
 
 # Test with codecoverage to cov.xml
 script:

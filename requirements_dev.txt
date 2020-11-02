@@ -1,0 +1,3 @@
+# Developer Oriented
+pylint      # linting for Python
+pytest-cov  # includes pytest + coverage
