@@ -51,7 +51,6 @@ def test_invalid_location_assignment_none():
     """
     with pytest.raises(ValidationError) as excval:
         Location()
-    assert NEITHER_MSG in str(excval)
 
 
 def test_invalid_location_assignment_address():
