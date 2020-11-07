@@ -11,9 +11,8 @@ from deliver.models import Restaurant
 def base_restaurant():
     return {
         'name': "Big Lo's",
-        'location': {
-            'address': '20 W 34th St, New York, NY 10001'
-        }
+        "coordinate": { "latitude": 0, "longitude": 0 },
+        'address': '20 W 34th St, New York, NY 10001'
     }
 
 
@@ -32,7 +31,6 @@ def test_valid_restaurant_assign(base_restaurant, optionals):
 
 @pytest.mark.parametrize('delete, optionals', [
     (('name',), {}),
-    (('location',), {}),
     (tuple(), { 'menuUrl': 'realpython.com' }),
     (tuple(), { 'id': 'bad id' }),
 ])
@@ -46,13 +44,3 @@ def test_invalid_restraurant_assign(base_restaurant, delete, optionals):
     with pytest.raises(ValidationError):
         Restaurant(**base_restaurant, **optionals)
     # TODO: Add Additional Testing with Exception Output
-
-
-def test_unique_restaurants(base_restaurant):
-    """Testing unique restaurant
-
-    Testing if unique restaurants have different
-    """
-    restaurant_a = Restaurant(**base_restaurant)
-    restaurant_b = Restaurant(**base_restaurant)
-    assert restaurant_a.id != restaurant_b.id

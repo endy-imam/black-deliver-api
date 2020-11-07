@@ -18,22 +18,14 @@ Hierachy of Classes:
     - Wheelchair Accessibity: List[str]
 """
 
-from typing import Optional, Set, Dict, Union, Any, Type
+from typing import Optional, Set
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field, HttpUrl, conset, root_validator
+from pydantic import BaseModel, Field, constr, HttpUrl
 
 from .utils    import to_lower_camel
-from .location import Location
-from .hours    import OpeningHours
+from .location import Coordinate
 from .services import Services
-from .enums    import (
-    FoodCategory,
-    DiningAmenety,
-    SafetyMeasure,
-    Inclusivity,
-    WheelchairAccessibity
-)
 
 
 class Restaurant(BaseModel):
@@ -48,35 +40,16 @@ class Restaurant(BaseModel):
             A list of hours in the week for available services
         food_category (Set[FoodCategory]):
             A set of type of food, should be non-empty
-        dining_available (bool):
-            If the restaurant is available for dining
-        dining_ameneties (Optional[Set[DiningAmenety]]):
-            A set of ameneties, optional but only if dining
-        safety_measures (Optional[Set[SafetyMeasure]]):
-            A set of safety measures, required if dining available right now
         services (Services):
             A list of pickup and deliver services available
-        inclusivities (Set[Inclusivity]):
-            A set of inclusivity tags
-        wheelchair_accessibilities (Set[WheelchairAccessibity]):
-            A set of wheelchair accessibilities
     """
     id: UUID = Field(default_factory=uuid4)
     name: str
-    location: Location
-    opening_hours: OpeningHours = OpeningHours()
-    food_categories: Set[Union[FoodCategory, str]] = set()
+    coordinate: Coordinate
+    address: Optional[constr(min_length=1)]
+    food_categories: Set[str] = set()
     menu_url: Optional[HttpUrl]
-    dining_available: bool = False
-    pickup_available: bool = False
-    curbside_available: bool = False
-    delivery_available: bool = False
-    dining_ameneties: Optional[Set[DiningAmenety]]
-    safety_measures: Optional[Set[SafetyMeasure]]
     services: Services = Services()
-    inclusivities: Set[Inclusivity] = set()
-    wheelchair_accessibities: Set[WheelchairAccessibity] = set()
-
 
     class Config:
         """Config for Restaurant Model
@@ -84,19 +57,3 @@ class Restaurant(BaseModel):
         - Must comply as typical JS/JSON variable name
         """
         alias_generator = to_lower_camel
-
-    @root_validator
-    def has_pickup(cls, values):
-        """Check if the restaurant has pickup
-        """
-        services = values['services']
-        values['pickup_available'] = (
-            services.has_pickup() if services else False
-        )
-        values['curbside_available'] = (
-            services.has_curbside() if services else False
-        )
-        values['delivery_available'] = (
-            services.has_delivery() if services else False
-        )
-        return values
