@@ -7,21 +7,25 @@ Hierachy of Classes:
 """
 
 from itertools import chain
-from typing import Dict, Optional, Iterator, Union
-from pydantic import BaseModel, root_validator, constr, HttpUrl
+from typing import Dict, Optional, Iterator
+import re
+
+from pydantic import BaseModel, validator, HttpUrl
 
 from .utils import to_lower_camel
 from .enums import ServiceApp
 
 
 SERVICES_BASE_URL = {
-    ServiceApp.UBER_EATS: 'https://www.ubereats.com/',
-    ServiceApp.GRUBHUB  : 'https://www.grubhub.com/',
-    ServiceApp.DOORDASH : 'https://www.doordash.com/stores/',
-    ServiceApp.TOAST    : 'https://www.toasttab.com/',
-    ServiceApp.YELP     : 'https://yelp.to',
-    ServiceApp.POSTMATES: 'https://postmates.com/merchant/',
-    ServiceApp.CAVIAR   : 'https://www.trycaviar.com/'
+    ServiceApp.UBER_EATS : 'https://www.ubereats.com/',
+    ServiceApp.GRUBHUB   : 'https://www.grubhub.com/',
+    ServiceApp.DOORDASH  : 'https://www.doordash.com/stores/',
+    ServiceApp.POSTMATES : 'https://postmates.com/merchant/',
+    ServiceApp.TOAST     : 'https://www.toasttab.com/',
+    ServiceApp.YELP      : 'https://yelp.to',
+    ServiceApp.CAVIAR    : 'https://www.trycaviar.com/',
+    ServiceApp.SEAMLESS  : 'https://www.seamless.com/',
+    ServiceApp.FOURSQUARE: 'https://foursquare.com/city-guide'
 }
 
 
@@ -44,7 +48,9 @@ class BaseService(BaseModel):
 
 
 PHONE_REGEX = (
-    r"^[\+]?(1[-\s\.])?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$"
+    r"^[\+]?(1[-\s\.]*)?"
+    r"[(]?(\d{3})[)]?[-\s\.]*"
+    r"(\d{3})[-\s\.]*(\d{4})$"
 )
 
 class PhoneService(BaseService):
@@ -55,7 +61,16 @@ class PhoneService(BaseService):
         pickup:   If service does pickup
         delivery: If service does delivery
     """
-    number: constr(regex=PHONE_REGEX)
+    number: str
+
+    @validator('number')
+    def valid_phone_number(cls, value):
+        """Validate to uniform U.S. Phone Number
+        """
+        match = re.fullmatch(PHONE_REGEX, value)
+        if not match:
+            raise ValueError('Must be a valid phone number.')
+        return f'({match[2]}) {match[3]}-{match[4]}'
 
 
 class OnlineService(BaseService):
@@ -75,13 +90,11 @@ class Services(BaseModel):
     Attributes:
         website Food service via restaurant's own site
         phone: Food service via phone number
-        delivery_apps: A list of links to delivery-only app services
-        extras: A list of extra online/app services
+        apps: A list of online/app services
     """
     website: Optional[OnlineService]
     phone: Optional[PhoneService]
-    delivery_apps: Dict[str, HttpUrl] = {}
-    extras: Dict[str, OnlineService] = {}
+    apps: Dict[str, OnlineService] = {}
 
     class Config:
         """Config for Restaurant Model
@@ -95,10 +108,11 @@ class Services(BaseModel):
         """
         return filter(
             lambda service: service is not None,
-            chain((self.website, self.phone), self.extras.values())
+            chain((self.website, self.phone), self.apps.values())
         )
 
-    def has_pickup(self) -> bool:
+    @property
+    def pickup_available(self) -> bool:
         """Check if the restaurant has pickup
         """
         return any(
@@ -106,10 +120,11 @@ class Services(BaseModel):
             for service in self._iter_service()
         )
 
-    def has_delivery(self) -> bool:
+    @property
+    def delivery_available(self) -> bool:
         """Check if the restaurant has delivery
         """
-        return len(self.delivery_apps) > 0 or any(
+        return  any(
             service is not None and service.delivery
             for service in self._iter_service()
         )

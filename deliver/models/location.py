@@ -6,17 +6,15 @@ Hierachy of Classes:
   - Address: str
 """
 
-from typing import Optional
-
-from pydantic import BaseModel, confloat, constr, root_validator
+from pydantic import BaseModel, condecimal
 
 
 class Coordinate(BaseModel):
     """Class for coordinates on earth
 
     Attributes:
-        latitude (float): The latitude of the coordinate
-        longitude (float): The longitude of the coordinate
+        latitude (Decimal): The latitude of the coordinate
+        longitude (Decimal): The longitude of the coordinate
     """
-    latitude:  confloat(ge=- 90, le= 90) = 0
-    longitude: confloat(ge=-180, le=180) = 0
+    latitude:  condecimal(ge=- 90, le= 90) = 0
+    longitude: condecimal(ge=-180, le=180) = 0
