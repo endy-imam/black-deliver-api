@@ -1,0 +1,7 @@
+{
+  "name": "project-deliver-api",
+  "devDependencies": {
+    "serverless": "^2.12.0",
+    "serverless-python-requirements": "^5.1.0"
+  }
+}

@@ -24,6 +24,7 @@ The Backend API portion of the Project Delivery App for [Out In Tech U Mentorshi
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
   * [Run the App!](#run-the-app!)
+  * [Deploy the App!](#deploy-the-app!)
   * [Directory Tree](#directory-tree)
   * [Testing](#testing)
     * [Using just `pytest`](#using-just-pytest)
@@ -113,6 +114,30 @@ Just type this command and it will be run on `http://127.0.0.1:8000` to be able 
 $ uvicorn deliver.main:app --reload
 ```
 
+
+### Deploy the App!
+
+_[TODO: Add more detail on setting up AWS, install serverless framework]_
+
+... but if you figure that out, The thing you needed is install some node package requirements for serverless.
+```sh
+# at project root
+$ npm i
+```
+
+Finally, deploy it with this command deploy.
+```sh
+# at project root
+$ sls deploy
+```
+
+It's also important to deactivate it once you're done.
+```sh
+# at project root
+$ sls remove
+```
+
+
 ### Directory Tree
 ```
 .
@@ -141,7 +166,10 @@ $ uvicorn deliver.main:app --reload
 ├── LICENSE
 ├── README.md
 ├── requirements.txt
-└── requirements_dev.txt
+├── requirements_dev.txt
+├── package.json
+├── package-lock.json
+└── serverless.yml
 ```
 
 
